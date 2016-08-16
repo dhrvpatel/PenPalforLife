@@ -4,6 +4,7 @@ class Teacher extends CI_Controller {
 
 	var $Email;
 	var $Password;
+	var $UserId;
 	
 	var $sql;
     
@@ -29,6 +30,20 @@ class Teacher extends CI_Controller {
          echo $json;
          
     }
+	
+	public function GetTeacher($UserID) {
+        // sql statement
+        $this->sql = "SELECT * FROM USER WHERE UserID = '$UserID'";
+         
+        // query db method
+         $data = $this->database->db_query($this->sql);
+         
+        // encode the data into json
+         $json = json_encode($data);  
+        // output data in JSON
+         echo $json;
+    }
+	
 	///helper function to output json-boolean feedbck
     private function dbFeedBack($bool){
         if($bool == FALSE){
@@ -53,4 +68,5 @@ class Teacher extends CI_Controller {
              echo $this->dbFeedBack(TRUE);
          }       
     }
+}
 	

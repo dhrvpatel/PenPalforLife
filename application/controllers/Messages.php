@@ -3,7 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Messages extends CI_Controller {
 
 	var $UserID;
-	
+	var $Email;
+	var $Message;
+	var $Subject;
 	var $sql;
     
     public function __construct() {
@@ -26,6 +28,28 @@ class Messages extends CI_Controller {
         // output data in JSON
          echo $json; 
     }
+	
+	public function SendMail($email,$message,$subject)
+	{						
+		require_once('mailer/class.phpmailer.php');
+		
+		$mail = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPDebug  = 0;                    
+        $mail->SMTPAuth   = true;                 
+        $mail->SMTPSecure = "ssl";                
+        $mail->Host       = "smtp.gmail.com";     
+        $mail->Port       = 465;                         
+		$mail->AddAddress($email);
+		$mail->Username="richie.rich774@gmail.com";  
+		$mail->Password="aparichit";            
+		$mail->SetFrom('richie.rich774@gmail.com','Dhruv Patel');
+		$mail->Subject   = $subject;
+		$mail->MsgHTML($message);
+		$mail->Send();
+		
+		echo "Email sent successfully";
+	}	
 	
 	///helper function to output json-boolean feedbck
     private function dbFeedBack($bool){

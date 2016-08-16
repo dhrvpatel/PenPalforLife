@@ -1,14 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Gifts extends CI_Controller {
+class Interest extends CI_Controller {
 
-	var $UserId;
-	var $FriendId;
-	var $GiftId;
-	var $GiftName;
-	var $PointValue;
-	var	$GifImage;
-	
+
 	var $sql;
     
     public function __construct() {
@@ -19,11 +13,10 @@ class Gifts extends CI_Controller {
 	
 	public function index(){}
 	
-	
-	//CLEAR THIS FUNCTION
-	public function ListGiftsByUser($UserID) {
+	   
+    public function GetSubject($SubjectID) {
         // sql statement
-        $this->sql = "SELECT * FROM gifts g INNER JOIN usergifts ug ON ug.giftId = g.id WHERE ug.userId = '$UserID' ";
+        $this->sql = "SELECT * FROM subject WHERE id = $SubjectID";
          
         // query db method
          $data = $this->database->db_query($this->sql);
@@ -35,52 +28,38 @@ class Gifts extends CI_Controller {
     }
 	
 	   
-    public function GetGift($GiftID) {
+    public function AddSubject($SubjectName) {
         // sql statement
-        $this->sql = "SELECT * FROM gifts WHERE id = $GiftID";
-         
-        // query db method
-         $data = $this->database->db_query($this->sql);
-         
-        // encode the data into json
-         $json = json_encode($data);  
-        // output data in JSON
-         echo $json; 
-    }
-	
-	   
-    public function AddGift($GiftName, $PointValue, $GifImage) {
-        // sql statement
-        $this->sql = "INSERT INTO gifts (name, point, gifImage) VALUES ('$GiftName', '$PointValue', '$GifImage')";
+        $this->sql = "INSERT INTO subjecr (name) VALUES ('$SubjectName')";
         $bool = $this->database->insert2db($this->sql); 
         
         echo $bool;
 		return $bool;
     }
 
-	public function EditGift($objGift) {
+	public function EditSubject($objSubject) {
 		
         // convert JSON data to array
-        $gift_object = json_decode($objGift, True);
+        $subject_object = json_decode($objSubject, True);
         
         // loop the properties of the group object to generate sql statement        
-        foreach($group_object as $key => $item){
+        foreach($subject_object as $key => $item){
             $sql_condition .= $key . " = '$item', ";            
         }
         
         // Remove characters from the right side of a string:
         $sql_condition = rtrim($sql_condition,", ");
         
-        $this->sql = "update gifts set $sql_condition WHERE id = '".$objGift["id"]."'";
+        $this->sql = "update subject set $sql_condition WHERE id = '".$objSubject["id"]."'";
         $bool = $this->database->insert2db($this->sql); 
         
         echo $bool;
 	    return $bool;
     }
 	
-	public function DeleteGift($GiftId) {
+	public function DeleteSubject($SubjectID) {
         // sql statement
-        $this->sql = "Delete from gifts where id = '$GiftId' ";
+        $this->sql = "Delete from subject where id = '$SubjectID' ";
         $bool = $this->database->insert2db($this->sql); 
         
         echo $bool;
